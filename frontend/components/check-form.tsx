@@ -361,6 +361,17 @@ export function CheckForm({ userId }: CheckFormProps) {
   }
 
   const handleAmountChange = (value: string) => {
+    // Vérifier que la valeur ne contient que des chiffres, espaces, points et virgules
+    const hasLetters = /[a-zA-Z]/.test(value)
+    if (hasLetters) {
+      toast({
+        title: "Erreur de saisie",
+        description: "Le montant ne peut pas contenir de lettres",
+        variant: "destructive"
+      })
+      return
+    }
+    
     // Retirer les espaces pour le calcul
     const cleanValue = value.replace(/\s/g, "")
     // Formater avec espaces pour l'affichage
@@ -610,7 +621,20 @@ export function CheckForm({ userId }: CheckFormProps) {
                   id="amountInWords"
                   placeholder="dix mille dinars algériens"
                   value={amountInWords}
-                  onChange={(e) => setAmountInWords(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value
+                    // Vérifier que la valeur ne contient pas de chiffres
+                    const hasDigits = /\d/.test(value)
+                    if (hasDigits) {
+                      toast({
+                        title: "Erreur de saisie",
+                        description: "Le montant en lettres ne peut pas contenir de chiffres",
+                        variant: "destructive"
+                      })
+                      return
+                    }
+                    setAmountInWords(value)
+                  }}
                   disabled={!isBankSelected}
                   rows={2}
                   required

@@ -44,8 +44,16 @@ interface User {
   createdAt: string;
 }
 
+interface Region {
+  id: number;
+  name: string;
+  villes: string[];
+  createdAt: string;
+}
+
 export default function AdminUserManagement() {
   const [users, setUsers] = useState<User[]>([]);
+  const [regions, setRegions] = useState<Region[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -66,6 +74,7 @@ export default function AdminUserManagement() {
 
   useEffect(() => {
     fetchUsers();
+    fetchRegions();
   }, []);
 
   const fetchUsers = async () => {
@@ -90,6 +99,27 @@ export default function AdminUserManagement() {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const fetchRegions = async () => {
+    try {
+      const token = localStorage.getItem("jwt");
+      const response = await fetch("http://localhost:5000/api/regions", {
+        credentials: "include",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+
+      if (!response.ok) throw new Error("Erreur de chargement des régions");
+
+      const data = await response.json();
+      setRegions(data);
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de charger les régions",
+        variant: "destructive",
+      });
     }
   };
 
@@ -373,10 +403,11 @@ export default function AdminUserManagement() {
                       <SelectValue placeholder="Sélectionnez une région" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="nord">Nord</SelectItem>
-                      <SelectItem value="sud">Sud</SelectItem>
-                      <SelectItem value="est">Est</SelectItem>
-                      <SelectItem value="ouest">Ouest</SelectItem>
+                      {regions.map((region) => (
+                        <SelectItem key={region.id} value={region.name}>
+                          {region.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -518,10 +549,11 @@ export default function AdminUserManagement() {
                     <SelectValue placeholder="Sélectionnez une région" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="nord">Nord</SelectItem>
-                    <SelectItem value="sud">Sud</SelectItem>
-                    <SelectItem value="est">Est</SelectItem>
-                    <SelectItem value="ouest">Ouest</SelectItem>
+                    {regions.map((region) => (
+                      <SelectItem key={region.id} value={region.name}>
+                        {region.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

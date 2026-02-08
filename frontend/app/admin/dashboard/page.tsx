@@ -20,7 +20,7 @@ export default function AdminDashboard() {
     const checkAccess = async () => {
       try {
         const token = localStorage.getItem("jwt");
-        const response = await fetch("http://localhost:5000/api/admin/users", {
+        const response = await fetch("http://localhost:5001/api/admin/users", {
           credentials: "include",
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });

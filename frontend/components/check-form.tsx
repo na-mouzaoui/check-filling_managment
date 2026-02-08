@@ -24,7 +24,7 @@ const PDFViewer = dynamic(() => import("./pdf-viewer").then(mod => mod.PDFViewer
   ssr: false,
 })
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000"
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5001"
 
 const requestWithAuth = async (input: string, init: RequestInit = {}) => {
   const token = localStorage.getItem("jwt")

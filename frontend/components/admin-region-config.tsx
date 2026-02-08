@@ -55,7 +55,7 @@ export default function AdminRegionConfig() {
   const fetchRegions = async () => {
     try {
       const token = localStorage.getItem("jwt");
-      const response = await fetch("http://localhost:5000/api/regions", {
+      const response = await fetch("http://localhost:5001/api/regions", {
         credentials: "include",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
@@ -115,7 +115,7 @@ export default function AdminRegionConfig() {
       const headers: Record<string, string> = { "Content-Type": "application/json" };
       if (token) headers.Authorization = `Bearer ${token}`;
       
-      const response = await fetch(`http://localhost:5000/api/regions/${regionId}`, {
+      const response = await fetch(`http://localhost:5001/api/regions/${regionId}`, {
         method: "PUT",
         headers,
         credentials: "include",
@@ -165,7 +165,7 @@ export default function AdminRegionConfig() {
       const headers: Record<string, string> = { "Content-Type": "application/json" };
       if (token) headers.Authorization = `Bearer ${token}`;
       
-      const response = await fetch("http://localhost:5000/api/regions", {
+      const response = await fetch("http://localhost:5001/api/regions", {
         method: "POST",
         headers,
         credentials: "include",
@@ -203,7 +203,7 @@ export default function AdminRegionConfig() {
 
     try {
       const token = localStorage.getItem("jwt");
-      const response = await fetch(`http://localhost:5000/api/regions/${regionToDelete.id}`, {
+      const response = await fetch(`http://localhost:5001/api/regions/${regionToDelete.id}`, {
         method: "DELETE",
         credentials: "include",
         headers: token ? { Authorization: `Bearer ${token}` } : {},

@@ -36,10 +36,21 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.SetIsOriginAllowed(origin => allowedOrigins.Any(o => origin.StartsWith(o))) // autorise tous les ports sur localhost
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+        // Autoriser toutes les origines en mode permissif si "*" est configuré
+        if (allowedOrigins.Contains("*"))
+        {
+            policy.SetIsOriginAllowed(_ => true) // Accepte toutes les origines
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials(); // Garde les credentials pour les cookies JWT
+        }
+        else
+        {
+            policy.SetIsOriginAllowed(origin => allowedOrigins.Any(o => origin.StartsWith(o)))
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        }
     });
 });
 

@@ -32,12 +32,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
     ?? new[] { "http://localhost", "http://127.0.0.1" };
 
+var allowAllOrigins = allowedOrigins.Contains("*");
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
         // Autoriser toutes les origines en mode permissif si "*" est configuré
-        if (allowedOrigins.Contains("*"))
+        if (allowAllOrigins)
         {
             policy.SetIsOriginAllowed(_ => true) // Accepte toutes les origines
                   .AllowAnyHeader()
@@ -117,6 +119,9 @@ if (app.Environment.IsDevelopment())
     // app.UseSwaggerUI();
 }
 
+// IMPORTANT: UseCors doit être appelé AVANT UseStaticFiles, UseRouting, UseAuthentication, UseAuthorization
+app.UseCors("AllowFrontend");
+
 // Serve static files for uploaded PDFs
 app.UseStaticFiles(new StaticFileOptions
 {
@@ -124,17 +129,18 @@ app.UseStaticFiles(new StaticFileOptions
     {
         // Add CORS headers to static files
         var origin = ctx.Context.Request.Headers["Origin"].ToString();
-        if (!string.IsNullOrEmpty(origin) && allowedOrigins.Any(o => origin.StartsWith(o)))
+        if (!string.IsNullOrEmpty(origin))
         {
-            ctx.Context.Response.Headers.Append("Access-Control-Allow-Origin", origin);
-            ctx.Context.Response.Headers.Append("Access-Control-Allow-Credentials", "true");
+            if (allowAllOrigins || allowedOrigins.Any(o => origin.StartsWith(o)))
+            {
+                ctx.Context.Response.Headers.Append("Access-Control-Allow-Origin", origin);
+                ctx.Context.Response.Headers.Append("Access-Control-Allow-Credentials", "true");
+            }
         }
     }
 });
 
 app.UseRouting();
-
-app.UseCors("AllowFrontend");
 
 app.UseAuthentication();
 app.UseAuthorization();

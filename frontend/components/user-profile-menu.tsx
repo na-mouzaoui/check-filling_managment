@@ -24,6 +24,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { User, Key, LogOut, Shield } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { API_BASE } from "@/lib/config";
 
 interface UserData {
   email: string;
@@ -48,7 +49,7 @@ export default function UserProfileMenu() {
     
     const fetchUserProfile = async () => {
       try {
-        const response = await fetch("http://localhost:5001/api/auth/me", {
+        const response = await fetch(`${API_BASE}/api/auth/me`, {
           credentials: "include",
         });
 
@@ -89,7 +90,7 @@ export default function UserProfileMenu() {
     }
 
     try {
-      const response = await fetch("http://localhost:5001/api/auth/change-password", {
+      const response = await fetch(`${API_BASE}/api/auth/change-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

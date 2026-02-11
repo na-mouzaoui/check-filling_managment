@@ -31,6 +31,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { Pencil, Trash2, Plus, Eye, EyeOff } from "lucide-react";
+import { API_BASE } from "@/lib/config";
 
 interface User {
   id: number;
@@ -80,7 +81,7 @@ export default function AdminUserManagement() {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem("jwt");
-      const response = await fetch("http://localhost:5001/api/admin/users", {
+      const response = await fetch(`${API_BASE}/api/admin/users`, {
         credentials: "include",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
@@ -105,7 +106,7 @@ export default function AdminUserManagement() {
   const fetchRegions = async () => {
     try {
       const token = localStorage.getItem("jwt");
-      const response = await fetch("http://localhost:5001/api/regions", {
+      const response = await fetch(`${API_BASE}/api/regions`, {
         credentials: "include",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
@@ -149,7 +150,7 @@ export default function AdminUserManagement() {
       const headers: Record<string, string> = { "Content-Type": "application/json" };
       if (token) headers.Authorization = `Bearer ${token}`;
       
-      const response = await fetch("http://localhost:5001/api/admin/users", {
+      const response = await fetch(`${API_BASE}/api/admin/users`, {
         method: "POST",
         headers,
         credentials: "include",
@@ -186,7 +187,7 @@ export default function AdminUserManagement() {
       const headers: Record<string, string> = { "Content-Type": "application/json" };
       if (token) headers.Authorization = `Bearer ${token}`;
       
-      const response = await fetch(`http://localhost:5001/api/admin/users/${selectedUser.id}`, {
+      const response = await fetch(`${API_BASE}/api/admin/users/${selectedUser.id}`, {
         method: "PUT",
         headers,
         credentials: "include",
@@ -221,7 +222,7 @@ export default function AdminUserManagement() {
 
     try {
       const token = localStorage.getItem("jwt");
-      const response = await fetch(`http://localhost:5001/api/admin/users/${userId}`, {
+      const response = await fetch(`${API_BASE}/api/admin/users/${userId}`, {
         method: "DELETE",
         credentials: "include",
         headers: token ? { Authorization: `Bearer ${token}` } : {},

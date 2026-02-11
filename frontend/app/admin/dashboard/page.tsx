@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import { API_BASE } from "@/lib/config";
 import AdminUserManagement from "@/components/admin-user-management";
 import AdminRegionConfig from "@/components/admin-region-config";
 import AdminAuditLogs from "@/components/admin-audit-logs";
@@ -20,7 +21,7 @@ export default function AdminDashboard() {
     const checkAccess = async () => {
       try {
         const token = localStorage.getItem("jwt");
-        const response = await fetch("http://localhost:5001/api/admin/users", {
+        const response = await fetch(`${API_BASE}/api/admin/users`, {
           credentials: "include",
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });

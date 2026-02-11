@@ -23,6 +23,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { API_BASE } from "@/lib/config";
 
 interface AuditLog {
   id: number;
@@ -51,7 +52,7 @@ export default function AuditLogViewer() {
   const fetchLogs = async () => {
     setIsLoading(true);
     try {
-      let url = "http://localhost:5001/api/admin/audit-logs?";
+      let url = `${API_BASE}/api/admin/audit-logs?`;
       const params = new URLSearchParams();
 
       if (actionFilter) params.append("action", actionFilter);

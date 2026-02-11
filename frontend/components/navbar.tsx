@@ -1,10 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { logout } from "@/lib/auth-client"
-import { LayoutDashboard, FileText, History, LogOut } from "lucide-react"
+import { LayoutDashboard, FileText, History } from "lucide-react"
+import UserProfileMenu from "@/components/user-profile-menu"
 import type { User } from "@/lib/db"
 
 interface NavbarProps {
@@ -13,13 +13,6 @@ interface NavbarProps {
 
 export function Navbar({ user }: NavbarProps) {
   const pathname = usePathname()
-  const router = useRouter()
-
-  const handleLogout = async () => {
-    await logout()
-    router.push("/login")
-    router.refresh()
-  }
 
   const links = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -61,12 +54,4 @@ export function Navbar({ user }: NavbarProps) {
               onClick={handleLogout}
               className="flex items-center gap-2 bg-transparent"
             >
-              <LogOut className="h-4 w-4" />
-              Déconnexion
-            </Button>
-          </div>
-        </div>
-      </div>
-    </nav>
-  )
-}
+             UserProfileMenu /
